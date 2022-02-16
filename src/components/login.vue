@@ -79,10 +79,24 @@ export default {
      * 登录验证，valid 返回验证的结果是 true 还是 false
      */
     login() {
-      this.$refs.loginFormRef.validate(valid => {
-        if (valid === false) {
+      this.$refs.loginFormRef.validate(async valid => {
+        // if (valid === false) {
+        if (!valid) {
           this.$message.error("用户名或者密码错误")
           return;
+        }
+        // this.$http.post("login", this.loginForm).then((res) => {
+        // this.$http.post("login", {
+        //   username: this.loginForm.username,
+        //   password: this.loginForm.password
+        // }).then((res) => {
+        //   console.log({res})
+        // })
+        let result = await this.$http.post("login", this.loginForm)
+        if (result.data.meta.status !== 200) {
+          this.$message.error("登录失败")
+        } else {
+          this.$message.success("登录成功")
         }
       })
 
