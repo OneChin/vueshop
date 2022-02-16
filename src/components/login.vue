@@ -5,7 +5,7 @@
         <img src="@/assets/vue-logo.png" alt="" />
       </div>
       <!-- 登录表单区域 -->
-      <el-form class="login_form" :model="loginForm" :rules="loginFormRules">
+      <el-form ref="loginFormRef" class="login_form" :model="loginForm" :rules="loginFormRules">
         <!-- 用户名 -->
         <!-- prop 属性指定验证规则 -->
         <el-form-item prop="username">
@@ -18,7 +18,7 @@
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -67,6 +67,14 @@ export default {
       },
     };
   },
+  methods: {
+    /**
+     * 重置表单
+     */
+    resetLoginForm() {
+      this.$refs.loginFormRef.resetFields()
+    }
+  }
 };
 </script>
 
