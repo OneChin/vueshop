@@ -5,14 +5,15 @@
         <img src="@/assets/vue-logo.png" alt="" />
       </div>
       <!-- 登录表单区域 -->
-      <el-form class="login_form">
+      <el-form class="login_form" :model="loginForm" :rules="loginFormRules">
         <!-- 用户名 -->
-        <el-form-item>
-          <el-input></el-input>
+        <!-- prop 属性指定验证规则 -->
+        <el-form-item prop="username">
+          <el-input v-model="loginForm.username"></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item>
-          <el-input></el-input>
+        <el-form-item prop="password">
+          <el-input v-model="loginForm.password" type="password"></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
@@ -25,7 +26,48 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      loginForm: {
+        username: "",
+        password: "",
+      },
+      // 表单校验
+      loginFormRules: {
+        // 验证用户名是否合法, blur 失去焦点之后触发
+        username: [
+          {
+            required: true,
+            message: "请输入登录名称",
+            trigger: "blur",
+          },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur"
+          },
+        ],
+        // 验证密码
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+          },
+          {
+            min: 6,
+            max: 10,
+            message: "长度在 6 到 10 个字符",
+            trigger: "blur"
+          },
+
+        ],
+      },
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -67,7 +109,7 @@ img {
   border-radius: 50%;
   background-color: #eee;
 }
-.login_form{
+.login_form {
   position: absolute;
   bottom: 0;
   width: 100%;
