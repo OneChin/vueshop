@@ -98,6 +98,12 @@ export default {
         } else {
           this.$message.success("登录成功")
         }
+        // 1. 讲登录成功之后的 token，保存到客户端的 sessionStorage 中
+        // 2. 通过编程式导航，跳转到后台主页
+        const {data: {data: {token}}} = result
+        // 保存 token
+        window.sessionStorage.setItem('token', token)
+        this.$router.push('/home')
       })
 
     }
