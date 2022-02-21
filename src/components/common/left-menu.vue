@@ -3,20 +3,19 @@
   <el-menu
     background-color="#333744"
     text-color="#fff"
-    active-text-color="#ffd04b"
-		:default-active="1"
+    active-text-color="#409eff"
   >
-    <el-submenu v-for="menu in menuList" :key="menu.order" :index="menu.index">
+    <el-submenu v-for="menu in menuList" :key="menu.id" :index="String(menu.order)">
       <template slot="title">
         <!-- 图标 -->
         <i class="el-icon-location"></i>
         <!-- 文本 -->
         <span>{{ menu.authName }}</span>
       </template>
-      <el-menu-item v-for="submenu in menu.children" :key="submenu.id" :index="submenu.order">
+      <el-menu-item v-for="submenu in menu.children" :key="submenu.id" :index="String(submenu.id)">
         <template slot="title">
           <!-- 图标 -->
-          <i class="el-icon-location"></i>
+          <i class="el-icon-menu"></i>
           <!-- 文本 -->
           <span>{{ submenu.authName }}</span>
         </template>
@@ -39,7 +38,6 @@ export default {
     async getMenuList() {
       const result = await this.$http.get("menus");
       this.menuList = result.data.data;
-      console.log(this.menuList);
     },
   },
   mounted() {
@@ -47,3 +45,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.el-menu {
+	border: none;
+}
+</style>
