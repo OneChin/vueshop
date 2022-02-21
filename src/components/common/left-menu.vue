@@ -4,15 +4,24 @@
     background-color="#333744"
     text-color="#fff"
     active-text-color="#409eff"
+    :router="true"
   >
-    <el-submenu v-for="menu in menuList" :key="menu.id" :index="String(menu.order)">
+    <el-submenu
+      v-for="menu in menuList"
+      :key="menu.id"
+      :index="'/' + menu.path"
+    >
       <template slot="title">
         <!-- 图标 -->
         <i class="el-icon-location"></i>
         <!-- 文本 -->
         <span>{{ menu.authName }}</span>
       </template>
-      <el-menu-item v-for="submenu in menu.children" :key="submenu.id" :index="String(submenu.id)">
+      <el-menu-item
+        v-for="submenu in menu.children"
+        :key="submenu.id"
+        :index="'/' + submenu.path"
+      >
         <template slot="title">
           <!-- 图标 -->
           <i class="el-icon-menu"></i>
@@ -48,6 +57,6 @@ export default {
 
 <style scoped>
 .el-menu {
-	border: none;
+  border: none;
 }
 </style>
