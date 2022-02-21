@@ -5,6 +5,7 @@
     text-color="#fff"
     active-text-color="#409eff"
     :router="true"
+    :default-active="activePath"
   >
     <el-submenu
       v-for="menu in menuList"
@@ -21,6 +22,7 @@
         v-for="submenu in menu.children"
         :key="submenu.id"
         :index="'/' + submenu.path"
+        @click="saveNavState('/' + submenu.path)"
       >
         <template slot="title">
           <!-- 图标 -->
@@ -38,6 +40,8 @@ export default {
   data() {
     return {
       menuList: [],
+      // 被激活的链接地址
+      activePath: "",
     };
   },
   methods: {
@@ -48,9 +52,19 @@ export default {
       const result = await this.$http.get("menus");
       this.menuList = result.data.data;
     },
+    /**
+     * 保存链接的激活状态
+     */
+    saveNavState(activePath) {
+      window.sessionStorage.setItem("activePath", activePath);
+    },
   },
   mounted() {
     this.getMenuList();
+  },
+  created() {
+		// 绑定高亮的菜单
+    this.activePath = window.sessionStorage.getItem("activePath");
   },
 };
 </script>
