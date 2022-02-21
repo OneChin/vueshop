@@ -11,7 +11,14 @@
       <el-aside width="200px">
         <left-menu />
       </el-aside>
-      <el-main><router-view /></el-main>
+      <el-main>
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ parrentRouter }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ currentRouter }}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <router-view />
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -22,12 +29,22 @@ export default {
   components: {
     leftMenu,
   },
+  data() {
+    return {
+      parrentRouter: "",
+      currentRouter: "",
+    };
+  },
   methods: {
     logout() {
       window.sessionStorage.clear();
-			this.$router.push("./login")
+      this.$router.push("./login");
     },
   },
+  created() {
+		this.parrentRouter = window.sessionStorage.getItem("parrentRouter")
+		this.currentRouter = window.sessionStorage.getItem("currentRouter")
+	},
 };
 </script>
 

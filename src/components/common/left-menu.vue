@@ -22,7 +22,7 @@
         v-for="submenu in menu.children"
         :key="submenu.id"
         :index="'/' + submenu.path"
-        @click="saveNavState('/' + submenu.path)"
+        @click="saveNavState('/' + submenu.path, menu.authName, submenu.authName)"
       >
         <template slot="title">
           <!-- 图标 -->
@@ -55,8 +55,10 @@ export default {
     /**
      * 保存链接的激活状态
      */
-    saveNavState(activePath) {
+    saveNavState(activePath, parentRouter, currentRouter) {
       window.sessionStorage.setItem("activePath", activePath);
+			window.sessionStorage.setItem("parentRouter", parentRouter)
+			window.sessionStorage.setItem("currentRouter", currentRouter)
     },
   },
   mounted() {
