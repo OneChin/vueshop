@@ -14,6 +14,7 @@
         </el-col>
       </el-row>
       <el-table :data="userList" stripe border>
+        <!-- 添加索引列 -->
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column prop="username" label="姓名"></el-table-column>
         <el-table-column prop="username" label="姓名"></el-table-column>
