@@ -45,7 +45,6 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   // 从 sessionStorage 中获取保存的 token 值
   const tokenStr = window.sessionStorage.getItem("token")
-  console.log({ tokenStr })
   // 如果没有 token，强制跳转登录页
   if (!tokenStr) return next('/login')
   next()
