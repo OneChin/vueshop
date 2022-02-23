@@ -20,8 +20,14 @@
         <el-table-column prop="username" label="姓名"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
         <el-table-column prop="mobile" label="电话"></el-table-column>
-        <el-table-column prop="role_name" label="角色"></el-table-column>
-        <el-table-column label="状态"></el-table-column>
+        <el-table-column prop="role_name" label="角色"> </el-table-column>
+        <el-table-column prop="mg_state" label="状态">
+          <!-- scope 接收数据，scope.row 代表当前行, 和 switch 组件绑定, 
+          使用了 slot-scope 的话就不用写上面的 prop 了 -->
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.mg_state"> </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column label="操作"></el-table-column>
       </el-table>
     </el-card>
