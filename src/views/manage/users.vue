@@ -49,7 +49,7 @@
               effect="dark"
               content="分配角色"
               placement="top"
-              :enterable="false"
+              :enterable=false
             >
               <el-button
                 type="warning"
@@ -60,6 +60,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :current-page="queryInfo.pagenum"
+        :page-sizes="pageSizes"
+        :page-size="queryInfo.pagesize"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        layout="total, sizes, prev, pager, next, jumper"
+      />
     </el-card>
   </div>
 </template>
@@ -74,8 +83,9 @@ export default {
       queryInfo: {
         query: "",
         pagenum: 1,
-        pagesize: 10,
+        pagesize: 1,
       },
+      pageSizes: [2, 5, 10]
     };
   },
   methods: {
@@ -90,6 +100,22 @@ export default {
       this.userList = res.data.users;
       this.total = res.data.total;
     },
+    /**
+     * 单页显示页数变更
+     */
+    handleSizeChange(newSize) {
+      this.queryInfo.pagesize = newSize;
+      // 重新请求数据
+      this.getUserData()
+    },
+    /**
+     * 当前页码改变
+     */
+    handleCurrentChange(newPage) {
+      this.queryInfo.pagenum = newPage;
+      // 重新请求数据
+      this.getUserData()
+    }
   },
   mounted() {
     this.getUserData();
