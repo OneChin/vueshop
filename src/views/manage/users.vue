@@ -5,8 +5,9 @@
       <el-row :gutter="20">
         <el-col :span="7">
           <!-- 搜索与添加区域 -->
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <!-- 绑定清空事件，重新请求数据 -->
+          <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserData">
+            <el-button slot="append" icon="el-icon-search" @click="getUserData"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -25,7 +26,8 @@
           <!-- scope 接收数据，scope.row 代表当前行, 和 switch 组件绑定, 
           使用了 slot-scope 的话就不用写上面的 prop 了 -->
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state"> </el-switch>
+            <el-switch v-model="scope.row.mg_state"
+            @change="userStateChange(scope.row)"> </el-switch>
           </template>
         </el-table-column>
         <!-- 使用自定义插槽自定义操作 -->
@@ -83,7 +85,7 @@ export default {
       queryInfo: {
         query: "",
         pagenum: 1,
-        pagesize: 1,
+        pagesize: 2,
       },
       pageSizes: [2, 5, 10]
     };
@@ -115,7 +117,18 @@ export default {
       this.queryInfo.pagenum = newPage;
       // 重新请求数据
       this.getUserData()
-    }
+    },
+    /**
+    *  用户状态改变事件
+     */
+    async userStateChange(user) {
+      let result = await this.$http.put(`users/${user.id}/state/${user.mg_state}`)
+      if (result.data.meta.status !== 200) {
+        user.mg_state = !user.mg_state;
+        return this.$message.error("更新用户失败")
+      }
+      this.$message.success("更新用户状态成功")
+     }
   },
   mounted() {
     this.getUserData();
