@@ -138,6 +138,24 @@ export default {
         email: "",
         phone: "",
       },
+      // 邮箱的校验规则
+      checkEamil: (rule, value, cb) => {
+        const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+        if (regEmail.test(value)) {
+          // 合法的邮箱
+          return cb();
+        }
+        cb(new Error("请输入合法的邮箱"));
+      },
+      // 手机号的校验规则
+      checkMobile: (rule, value, cb) => {
+        const regMobile = /^(0|86|1751)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        if (regMobile.test(value)) {
+          // 合法的邮箱
+          return cb();
+        }
+        cb(new Error("请输入合法的手机号"));
+      },
       // 添加表单验证规则
       addFormRules: {
         username: [
@@ -172,25 +190,21 @@ export default {
             message: "请输入邮箱",
             trigger: "blur",
           },
-          {
-            min: 6,
-            max: 15,
-            message: "用户名的长度在6-15个字符之间",
-            trigger: "blur",
-          },
+          // {
+          //   validator: checkEamil,
+          //   trigger: "blur",
+          // },
         ],
         phone: [
           {
             required: true,
-            message: "请输入手机",
+            message: "请输入手机号",
             trigger: "blur",
           },
-          {
-            min: 11,
-            max: 11,
-            message: "手机长度不对",
-            trigger: "blur",
-          },
+          // {
+          //   validator: checkMobile,
+          //   trigger: "blur",
+          // },
         ],
       },
     };
