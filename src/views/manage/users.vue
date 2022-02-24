@@ -6,12 +6,23 @@
         <el-col :span="7">
           <!-- 搜索与添加区域 -->
           <!-- 绑定清空事件，重新请求数据 -->
-          <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserData">
-            <el-button slot="append" icon="el-icon-search" @click="getUserData"></el-button>
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.query"
+            clearable
+            @clear="getUserData"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="getUserData"
+            ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="addDialogVisible = true"
+            >添加用户</el-button
+          >
         </el-col>
       </el-row>
       <el-table :data="userList" stripe border>
@@ -26,8 +37,11 @@
           <!-- scope 接收数据，scope.row 代表当前行, 和 switch 组件绑定, 
           使用了 slot-scope 的话就不用写上面的 prop 了 -->
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state"
-            @change="userStateChange(scope.row)"> </el-switch>
+            <el-switch
+              v-model="scope.row.mg_state"
+              @change="userStateChange(scope.row)"
+            >
+            </el-switch>
           </template>
         </el-table-column>
         <!-- 使用自定义插槽自定义操作 -->
@@ -51,7 +65,7 @@
               effect="dark"
               content="分配角色"
               placement="top"
-              :enterable=false
+              :enterable="false"
             >
               <el-button
                 type="warning"
@@ -72,6 +86,33 @@
         layout="total, sizes, prev, pager, next, jumper"
       />
     </el-card>
+    <el-dialog title="添加用户" width="50%" :visible.sync="addDialogVisible">
+      <!-- 主体区域 -->
+      <el-form
+        :model="addForm"
+        :rules="addFormRules"
+        ref="addFormRef"
+        label-width="70px"
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="addForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="addForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="addForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="phone">
+          <el-input v-model="addForm.phone"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 底部区域 -->
+      <el-button @click="addDialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="addDialogVisible = false"
+        >确 定</el-button
+      >
+    </el-dialog>
   </div>
 </template>
 
@@ -87,7 +128,71 @@ export default {
         pagenum: 1,
         pagesize: 2,
       },
-      pageSizes: [2, 5, 10]
+      pageSizes: [2, 5, 10],
+      // 添加对话框的显示与隐藏
+      addDialogVisible: false,
+      // 添加用户的表单数据
+      addForm: {
+        username: "",
+        password: "",
+        email: "",
+        phone: "",
+      },
+      // 添加表单验证规则
+      addFormRules: {
+        username: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "blur",
+          },
+          {
+            min: 3,
+            max: 10,
+            message: "用户名的长度在3-10个字符之间",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+          },
+          {
+            min: 6,
+            max: 15,
+            message: "用户名的长度在6-15个字符之间",
+            trigger: "blur",
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: "请输入邮箱",
+            trigger: "blur",
+          },
+          {
+            min: 6,
+            max: 15,
+            message: "用户名的长度在6-15个字符之间",
+            trigger: "blur",
+          },
+        ],
+        phone: [
+          {
+            required: true,
+            message: "请输入手机",
+            trigger: "blur",
+          },
+          {
+            min: 11,
+            max: 11,
+            message: "手机长度不对",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -108,7 +213,7 @@ export default {
     handleSizeChange(newSize) {
       this.queryInfo.pagesize = newSize;
       // 重新请求数据
-      this.getUserData()
+      this.getUserData();
     },
     /**
      * 当前页码改变
@@ -116,19 +221,21 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage;
       // 重新请求数据
-      this.getUserData()
+      this.getUserData();
     },
     /**
-    *  用户状态改变事件
+     *  用户状态改变事件
      */
     async userStateChange(user) {
-      let result = await this.$http.put(`users/${user.id}/state/${user.mg_state}`)
+      let result = await this.$http.put(
+        `users/${user.id}/state/${user.mg_state}`
+      );
       if (result.data.meta.status !== 200) {
         user.mg_state = !user.mg_state;
-        return this.$message.error("更新用户失败")
+        return this.$message.error("更新用户失败");
       }
-      this.$message.success("更新用户状态成功")
-     }
+      this.$message.success("更新用户状态成功");
+    },
   },
   mounted() {
     this.getUserData();
