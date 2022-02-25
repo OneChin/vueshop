@@ -86,7 +86,12 @@
         layout="total, sizes, prev, pager, next, jumper"
       />
     </el-card>
-    <el-dialog title="添加用户" width="50%" :visible.sync="addDialogVisible">
+    <el-dialog
+      title="添加用户"
+      width="50%"
+      :visible.sync="addDialogVisible"
+      @close="addDialogClose"
+    >
       <!-- 主体区域 -->
       <el-form
         :model="addForm"
@@ -149,7 +154,8 @@ export default {
       },
       // 手机号的校验规则
       checkMobile: (rule, value, cb) => {
-        const regMobile = /^(0|86|1751)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        const regMobile =
+          /^(0|86|1751)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
         if (regMobile.test(value)) {
           // 合法的邮箱
           return cb();
@@ -250,6 +256,18 @@ export default {
       }
       this.$message.success("更新用户状态成功");
     },
+    /**
+    * 处理对话框的关闭事件
+     */
+    addDialogClose() {
+      // this.addForm = {
+      //   username: "",
+      //   password: "",
+      //   email: "",
+      //   phone: "",
+      // }
+      this.$refs.addFormRef.resetFields()
+    }
   },
   mounted() {
     this.getUserData();
