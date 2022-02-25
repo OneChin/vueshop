@@ -114,9 +114,7 @@
       </el-form>
       <!-- 底部区域 -->
       <el-button @click="addDialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="addDialogVisible = false"
-        >确 定</el-button
-      >
+      <el-button type="primary" @click="addUser">确 定</el-button>
     </el-dialog>
   </div>
 </template>
@@ -131,9 +129,9 @@ export default {
       queryInfo: {
         query: "",
         pagenum: 1,
-        pagesize: 2,
+        pagesize: 10,
       },
-      pageSizes: [2, 5, 10],
+      pageSizes: [5, 10, 15],
       // 添加对话框的显示与隐藏
       addDialogVisible: false,
       // 添加用户的表单数据
@@ -257,7 +255,7 @@ export default {
       this.$message.success("更新用户状态成功");
     },
     /**
-    * 处理对话框的关闭事件
+     * 处理对话框的关闭事件
      */
     addDialogClose() {
       // this.addForm = {
@@ -266,8 +264,28 @@ export default {
       //   email: "",
       //   phone: "",
       // }
-      this.$refs.addFormRef.resetFields()
-    }
+      this.$refs.addFormRef.resetFields();
+    },
+    /**
+     * 添加新用户
+     */
+    addUser() {
+      // 先进性表单的校验
+      this.$refs.addFormRef.validate(async (valid) => {
+        if (!valid) {
+          console.log(valid);
+        }
+        const { data: res } = await this.$http.post("users", this.addForm);
+        if (res.meta.status !== 201) {
+          this.$message.error("添加用户失败")
+        }
+        if (res.meta.status === 201) {
+          this.$message.success("添加成功");
+          this.getUserData();
+          this.addDialogVisible = false;
+        }
+      });
+    },
   },
   mounted() {
     this.getUserData();
