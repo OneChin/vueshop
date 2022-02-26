@@ -60,6 +60,7 @@
               type="danger"
               icon="el-icon-delete"
               size="mini"
+              @click="removeUserById(scope.row.id)"
             ></el-button>
             <el-tooltip
               effect="dark"
@@ -387,8 +388,8 @@ export default {
             }
           );
           if (res.meta.status !== 200) {
-            return this.$message.error("更新用户信息错误")
-            }
+            return this.$message.error("更新用户信息错误");
+          }
           if (res.meta.status === 200) {
             this.$message.success("修改成功");
             this.getUserData();
@@ -396,6 +397,28 @@ export default {
           }
         }
       });
+    },
+    /**
+     * 根据 id 删除对应的用户信息
+     */
+    async removeUserById(id) {
+      let res = await this.$confirm("是否删除用户?", "提示", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).catch((err) => err);
+      // catch 捕获消息，取消返回的是 cancel
+      // 如果用户确认，返回的时 confirm
+      if (res !== "confirm") {
+        this.$message.info("取消删除");
+      }
+      if (res === "confirm") {
+        let { data: result } = await this.$http.delete(`users/${id}`);
+        if (result.meta.status === 200) {
+          this.$message.success("删除成功");
+          this.getUserData();
+        }
+      }
     },
   },
   mounted() {
