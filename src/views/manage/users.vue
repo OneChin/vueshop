@@ -364,18 +364,39 @@ export default {
       }
     },
     /**
-    * 监听用户修改表单的重置事件
+     * 监听用户修改表单的重置事件
      */
-     editDialogClose() {
-       // 重置表单
-       this.$refs.editFormRef.resetFields()
-     },
+    editDialogClose() {
+      // 重置表单
+      this.$refs.editFormRef.resetFields();
+    },
     /**
-    * 编辑用户
+     * 编辑用户
      */
-     editUser() {
-
-     },
+    editUser() {
+      this.$refs.editFormRef.validate(async (valid) => {
+        if (!valid) {
+          return;
+        }
+        if (valid === true) {
+          let { data: res } = await this.$http.put(
+            `users/${this.editForm.id}`,
+            {
+              email: this.editForm.email,
+              mobile: this.editForm.mobile,
+            }
+          );
+          if (res.meta.status !== 200) {
+            return this.$message.error("更新用户信息错误")
+            }
+          if (res.meta.status === 200) {
+            this.$message.success("修改成功");
+            this.getUserData();
+            this.editDialogVisible = false;
+          }
+        }
+      });
+    },
   },
   mounted() {
     this.getUserData();
