@@ -56,6 +56,7 @@ export default {
      * 保存链接的激活状态
      */
     saveNavState(activePath, parentRouter, currentRouter) {
+      console.log(arguments)
       window.sessionStorage.setItem("activePath", activePath);
 			window.sessionStorage.setItem("parentRouter", parentRouter)
 			window.sessionStorage.setItem("currentRouter", currentRouter)

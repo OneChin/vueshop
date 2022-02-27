@@ -41,8 +41,8 @@ export default {
       this.$router.push("./login");
     },
   },
-  created() {
-		this.parrentRouter = window.sessionStorage.getItem("parrentRouter")
+  updated() {
+		this.parrentRouter = window.sessionStorage.getItem("parentRouter")
 		this.currentRouter = window.sessionStorage.getItem("currentRouter")
 	},
 };
